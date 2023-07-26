@@ -1,0 +1,19 @@
+import pandas as pd
+import requests
+
+# Perform the GET request and obtain the response
+response = requests.get('https://api.spacexdata.com/v4/launches')
+
+# Convert the JSON response to a DataFrame using pd.json_normalize
+data = response.json()
+df = pd.json_normalize(data)
+
+# Access the first row of the "static_fire_date_utc" column
+first_row_static_fire_date = df['static_fire_date_utc'].iloc[0]
+
+# Extract the year from the date using Python's datetime functionality
+from datetime import datetime
+static_fire_date = datetime.strptime(first_row_static_fire_date, '%Y-%m-%dT%H:%M:%S.%fZ')
+year_in_first_row = static_fire_date.year
+
+print("Year located in the first row:", year_in_first_row)
